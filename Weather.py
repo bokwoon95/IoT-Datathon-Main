@@ -103,6 +103,9 @@ df['Humidity'] = df['Humidity'].apply(lambda x: int(x)) #Or I can use a simple l
 df = df.groupby('Time (CST)').mean() #aggregate the duplicate entries by taking their mean
 df['Humidity'] = df['Humidity'].apply(lambda x: int(x)) #mean() converts humidity column data to floats, so convert them back to int
 
+all_days = pd.date_range(df.index.min(), df.index.max(), freq='H')
+df = df.reindex(all_days).interpolate()
+
 df.columns = ["Temp/°C", "Humidity/%"] #Add units to column headers
 df.to_csv('./Weather Data (May-Nov)(Hourly).csv')
 print('The file "Weather Data (May-Nov)(Hourly).csv" has been created in the current folder.')

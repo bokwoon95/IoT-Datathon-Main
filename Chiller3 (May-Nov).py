@@ -5,26 +5,26 @@ import seaborn as sns
 import glob
 #matplotlib inline
 
-df_p = [pd.read_csv(file,index_col="ts") for file in glob.glob('./Raw Data/Chiller1_power/*.csv')]
-df_t = [pd.read_csv(file,index_col="ts") for file in glob.glob('./Raw Data/Chiller1_temp/*.csv')]
-df_e = [pd.read_csv(file,index_col="ts") for file in glob.glob('./Raw Data/Chiller1_evaflow/*.csv')]
-df_c = [pd.read_csv(file,index_col="ts") for file in glob.glob('./Raw Data/Chiller1_conflow/*.csv')]
+df_p = [pd.read_csv(file,index_col="ts") for file in glob.glob('./Raw Data/Chiller3_power/*.csv')]
+df_t = [pd.read_csv(file,index_col="ts") for file in glob.glob('./Raw Data/Chiller3_temp/*.csv')]
+df_e = [pd.read_csv(file,index_col="ts") for file in glob.glob('./Raw Data/Chiller3_evaflow/*.csv')]
+df_c = [pd.read_csv(file,index_col="ts") for file in glob.glob('./Raw Data/Chiller3_conflow/*.csv')]
 
 tab_p=pd.concat(df_p).sort_index()
 tab_p=tab_p[["ch1Watt","ch2Watt","ch3Watt","totalPositiveWattHour"]]
-tab_p.columns = ["C1ch1Watt","C1ch2Watt","C1ch3Watt","C1totalPositiveWattHour"]
+tab_p.columns = ["C3ch1Watt","C3ch2Watt","C3ch3Watt","C3totalPositiveWattHour"]
 
 tab_t=pd.concat(df_t).sort_index()
 tab_t=tab_t[["value1","value2","value3","value4"]]
-tab_t.columns=["C1temp1","C1temp2","C1temp3","C1temp4"]
+tab_t.columns=["C3temp1","C3temp2","C3temp3","C3temp4"]
 
 tab_e=pd.concat(df_e).sort_index()
 tab_e=tab_e[["flowRate","flowSpeed","totalFlowRate"]]
-tab_e.columns=["C1e.flowRate","C1e.flowSpeed","C1e.totalFlowRate"]
+tab_e.columns=["C3e.flowRate","C3e.flowSpeed","C3e.totalFlowRate"]
 
 tab_c=pd.concat(df_c).sort_index()
 tab_c=tab_c[["flowRate","flowSpeed","totalFlowRate"]]
-tab_c.columns=["C1c.flowRate","C1c.flowSpeed","C1c.totalFlowRate"]
+tab_c.columns=["C3c.flowRate","C3c.flowSpeed","C3c.totalFlowRate"]
 
 # tab_e[tab_e['e.totalFlowRate']<0]
 
@@ -50,15 +50,15 @@ for i in tables:
 print(tab_p.shape,tab_t.shape,tab_e.shape,tab_c.shape)
 
 result_p = tab_p.groupby('ts').mean()
-result_p['C1totalPositiveWattHour'] = tab_p['C1totalPositiveWattHour'].groupby('ts').min()-tab_p['C1totalPositiveWattHour'].min()
+result_p['C3totalPositiveWattHour'] = tab_p['C3totalPositiveWattHour'].groupby('ts').min()-tab_p['C3totalPositiveWattHour'].min()
 
 result_t = tab_t.groupby('ts').mean()
 
 result_e = tab_e.groupby('ts').mean()
-result_e['C1e.totalFlowRate'] = tab_e['C1e.totalFlowRate'].groupby('ts').min()-tab_e['C1e.totalFlowRate'].min()
+result_e['C3e.totalFlowRate'] = tab_e['C3e.totalFlowRate'].groupby('ts').min()-tab_e['C3e.totalFlowRate'].min()
 
 result_c = tab_c.groupby('ts').mean()
-result_c['C1c.totalFlowRate'] = tab_c['C1c.totalFlowRate'].groupby('ts').min()-tab_c['C1c.totalFlowRate'].min()
+result_c['C3c.totalFlowRate'] = tab_c['C3c.totalFlowRate'].groupby('ts').min()-tab_c['C3c.totalFlowRate'].min()
 
 all_days = pd.date_range(result_p.index.min(), result_p.index.max(), freq='H')
 # results=[result_p,result_t,result_e,result_c]
@@ -79,4 +79,4 @@ c1_final.describe()
 c1_final.info()
 #May-Nov has (31 + 30 + 31 + 31 + 30 + 31 + 30)(24) = 5136 hours in total.  There should be 5136 entries
 
-c1_final.to_csv('Chiller1 Data (May-Nov)(Hourly).csv')
+c1_final.to_csv('Chiller3 Data (May-Nov)(Hourly).csv')
