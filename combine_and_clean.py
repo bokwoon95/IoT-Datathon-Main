@@ -300,7 +300,6 @@ c4_final=tab_p_c4.merge(tab_t_c4,left_index=True, right_index=True).merge(tab_e_
 # In[14]:
 
 
-#merging with weather
 final=c1_final.merge(c2_final,left_index=True, right_index=True).merge(c3_final,left_index=True, right_index=True).merge(c4_final,left_index=True, right_index=True).merge(weather,left_index=True,right_index=True)
 
 
